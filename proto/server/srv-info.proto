@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+package srv_info;
+
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "github.com/bootapp/srv-ui/proto/clients/dal-ui/info.proto";
+
+
+service SrvInfoService {
+
+    rpc SaveDicts(dal_ui.DictList) returns (dal_ui.DictList) {
+        option (google.api.http) = {
+            post: "/info/dicts"
+            body: "*"
+        };
+    }
+
+    rpc SaveArticles(dal_ui.ArticleList) returns (dal_ui.ArticleList) {
+        option (google.api.http) = {
+            post: "/info/articles"
+            body: "*"
+        };
+    }
+
+    rpc UpdateDictsStatusByDictName(dal_ui.PublishReq) returns (dal_ui.DictList) {
+        option (google.api.http) = {
+            put: "/info/dicts/published"
+            body: "*"
+        };
+    }
+
+    rpc BatchDeleteDictsById(dal_ui.BatchDictId) returns (google.protobuf.Empty) {
+        option (google.api.http) = {
+            delete: "/info/dicts"
+        };
+    }
+
+    rpc BatchDeleteArticlesById(dal_ui.BatchArtId) returns (google.protobuf.Empty) {
+        option (google.api.http) = {
+            delete: "/info/articles"
+        };
+    }
+
+    // website query
+    rpc QueryDictsPage(dal_ui.DictPageReq) returns (dal_ui.DictPageResp) {
+        option (google.api.http) = {
+            get: "/info/dicts/{parent}/{status}/{language}"
+        };
+    }
+
+    rpc QueryArticle(dal_ui.ArticleReq) returns (dal_ui.Article) {
+        option (google.api.http) = {
+            get: "/info/article/{dict_name}/{status}/{language}"
+        };
+    }
+
+    // manage query
+    rpc QueryMultiDictsByParent(dal_ui.MultiDictReq) returns (dal_ui.MultiDictResp) {
+        option (google.api.http) = {
+            get: "/info/dicts/{parent}/{status}/{language}"
+        };
+    }
+
+    rpc QueryMultiArticlesByDictName(dal_ui.MultiArticleReq) returns (dal_ui.MultiArticleResp) {
+        option (google.api.http) = {
+            get: "/info/articles/{dict_name}/{status}/{language}"
+        };
+    }
+}
+
+// -------------------------------------------------------------------------------------------
